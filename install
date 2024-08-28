@@ -35,7 +35,8 @@ case $choice in
 2.create database and user and grant privileges
 3.Edit reverse proxy
 4.Edit /var/www/epusdt/.env
-5.Start supervisor";;
+5.Start supervisor
+6.Config of pay 'http://127.0.0.1:8000/api/v1/order/create-transaction'";;
     3)
         supervisorctl reread
         supervisorctl update
