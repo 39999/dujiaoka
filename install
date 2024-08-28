@@ -1,0 +1,44 @@
+clear
+path=$(pwd)
+echo '1)Download source 2)Tutorial 3)Start supervisor'
+echo ''
+read -p 'Enter your option: ' choice
+case $choice in
+    1)
+        cd /var/www/
+        mkdir -p /var/www/epusdt
+        chmod 777 -R /var/www/epusdt
+        wget -P /var/www/epusdt https://github.com/assimon/epusdt/releases/download/v0.0.2/epusdt_v0.0.2_Linux_x86_64.tar.gz
+        tar -xzf /var/www/epusdt/epusdt_v0.0.2_Linux_x86_64.tar.gz -C /var/www/epusdt
+       rm /var/www/epusdt/epusdt_v0.0.2_Linux_x86_64.tar.gz
+       clear
+       apt install supervisor -y
+       cp $path/epusdt.conf /etc/supervisor/conf.d
+       clear
+       cp $path/epusdt.web /etc/nginx/sites-available 
+       mv /var/www/epusdt/.env.example /var/www/epusdt/.env
+       echo -e "\e[32mSupervisor and Epusdt has been installed\e[0m"
+       echo ''
+       echo -e "\e[32mThis is Supervisor config\e[0m"
+       ls -lh /etc/supervisor/conf.d
+       echo -e "\e[32mThese are Epusdt file\e[0m"
+       ls -lha /var/www/epusdt
+       echo -e "\e[32mThis is Nginx config\e[0m"
+       ls -lh /etc/nginx/sites-available/epusdt.web
+       ln -s /etc/nginx/sites-available/epusdt.web /etc/nginx/sites-enabled/epusdt.web
+       echo -e "\e[32mThis Enable file\e[0m"
+       ls -lh /etc/nginx/sites-enabled/epusdt.web;;
+    2)
+        clear
+        echo -e "\e[32mTurorial\e[0m
+1.Import mysql
+2.create database and user and grant privileges
+3.Edit reverse proxy
+4.Edit /var/www/epusdt/.env
+5.Start supervisor";;
+    3)
+        supervisorctl reread
+        supervisorctl update
+        supervisorctl start epusdt
+        supervisorctl tail epusdt;;
+esac
